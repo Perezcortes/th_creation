@@ -1,26 +1,243 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* ============= PALETA DE COLORES TH CREATION ============= */
+  --color-brand-gold: #B8860B;
+  --color-brand-wood: #8B5A2B;
+  --color-brand-cream: #E5D3B3;
+  --color-brand-carbon: #1A1A1A;
+  --color-brand-graphite: #333333;
+
+  /* ============= TIPOGRAFÍA ============= */
+  --font-serif: var(--font-serif), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+
+  /* ============= ANIMACIONES PERSONALIZADAS ============= */
+  
+  /* Blob orgánico */
+  --animate-blob: blob 7s infinite;
+  
+  /* Gradiente animado */
+  --animate-gradient: gradient 8s ease infinite;
+  
+  /* Brillo suave */
+  --animate-glow: glow 2s ease-in-out infinite;
+  
+  /* Flotación suave */
+  --animate-float: float 3s ease-in-out infinite;
+  
+  /* Pulso sutil */
+  --animate-pulse-subtle: pulse-subtle 2s ease-in-out infinite;
+
+  /* Fade in desde abajo */
+  --animate-fade-in-up: fade-in-up 0.8s ease-out;
+
+  /* ============= KEYFRAMES ============= */
+  
+  @keyframes blob {
+    0%, 100% { 
+      transform: translate(0px, 0px) scale(1); 
+      border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    }
+    33% { 
+      transform: translate(30px, -50px) scale(1.1); 
+      border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+    }
+    66% { 
+      transform: translate(-20px, 20px) scale(0.9); 
+      border-radius: 50% 60% 30% 60% / 30% 60% 70% 40%;
+    }
+  }
+
+  @keyframes gradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  @keyframes glow {
+    0%, 100% { 
+      box-shadow: 0 0 20px rgba(184, 134, 11, 0.3),
+                  0 0 40px rgba(184, 134, 11, 0.1); 
+    }
+    50% { 
+      box-shadow: 0 0 30px rgba(184, 134, 11, 0.5),
+                  0 0 60px rgba(184, 134, 11, 0.2); 
+    }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+
+  @keyframes pulse-subtle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.05); }
+  }
+
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Delays para animaciones escalonadas */
+  --animation-delay-100: 100ms;
+  --animation-delay-200: 200ms;
+  --animation-delay-300: 300ms;
+  --animation-delay-500: 500ms;
+  --animation-delay-1000: 1000ms;
+  --animation-delay-2000: 2000ms;
+  --animation-delay-4000: 4000ms;
+
+  /* ============= SOMBRAS PERSONALIZADAS ============= */
+  --shadow-gold: 0 10px 40px -10px rgba(184, 134, 11, 0.3);
+  --shadow-gold-lg: 0 20px 60px -15px rgba(184, 134, 11, 0.4), 0 10px 30px -10px rgba(184, 134, 11, 0.2);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ============= CONFIGURACIÓN MODO OSCURO ============= */
+@variant dark (&:where(.dark, .dark *));
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ============= ESTILOS BASE ============= */
+@layer base {
+  /* Configuración del body */
+  body {
+    @apply transition-colors duration-500 ease-in-out;
+    /* Suavizado de fuentes */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Scroll suave */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Selección personalizada */
+  ::selection {
+    @apply bg-brand-gold text-white;
+  }
+
+  /* Scrollbar personalizado */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-brand-cream/50 dark:bg-brand-carbon;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-brand-wood/40 dark:bg-brand-gold/40 rounded-full;
+    transition: background 0.3s ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-brand-wood/60 dark:bg-brand-gold/60;
+  }
+
+  /* Focus visible mejorado */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-brand-gold ring-offset-2 ring-offset-white dark:ring-offset-brand-carbon;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ============= UTILIDADES PERSONALIZADAS ============= */
+@layer utilities {
+  /* Gradiente de texto animado */
+  .text-gradient-animate {
+    @apply bg-gradient-to-r from-brand-gold via-amber-500 to-brand-wood bg-clip-text text-transparent;
+    background-size: 200% auto;
+    animation: gradient 3s linear infinite;
+  }
+
+  /* Efecto glassmorphism */
+  .glass {
+    @apply bg-white/10 dark:bg-black/10 backdrop-blur-xl border border-white/20 dark:border-white/10;
+  }
+
+  /* Delays de animación */
+  .animation-delay-100 { animation-delay: 100ms; }
+  .animation-delay-200 { animation-delay: 200ms; }
+  .animation-delay-300 { animation-delay: 300ms; }
+  .animation-delay-500 { animation-delay: 500ms; }
+  .animation-delay-1000 { animation-delay: 1s; }
+  .animation-delay-2000 { animation-delay: 2s; }
+  .animation-delay-4000 { animation-delay: 4s; }
+
+  /* Tamaño de background para gradientes animados */
+  .bg-300\% {
+    background-size: 300% 300%;
+  }
+
+  /* Line clamp para múltiples líneas */
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* ============= ANIMACIONES DE ENTRADA ============= */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInFromBottom {
+  from { 
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from { 
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  from { 
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Clases de animación */
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out;
+}
+
+.animate-slide-in-bottom {
+  animation: slideInFromBottom 0.8s ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slideInFromLeft 0.8s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInFromRight 0.8s ease-out;
 }
